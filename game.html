@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play</title>
+    <script src="gscript.js" defer></script>
+
+    <style>
+        .toolbar{
+            background-color: rgb(217, 69, 0);
+            padding: 10px;
+        }
+        
+        body{
+            margin: 0;
+            display: flex;
+            flex-direction:column;
+            height:100vh;
+        }
+        
+        .playArea{
+            flex: 1;
+            background-color: grey;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('assets/sleek.png');
+            background-repeat: repeat;
+            background-size: 80px 80px;
+        }
+
+        canvas{
+            background-color: white;
+            width: 90vw;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            border: 2px solid black;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="toolbar">
+        <button>Hello</button>
+    </div>
+
+    <div class="playArea">
+        <canvas id="screen"></canvas>
+    </div>
+</body>
+</html>
