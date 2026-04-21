@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body{
+            padding: 0;
+            margin:0;
+            font-family: monospace;
+        }
+        .hero{
+            display: flex;
+            align-items: center;
+            justify-content:center;
+            
+            font-weight: 800;
+            font-size: large;
+            color: white;
+            background-color: rgb(255, 94, 0);
+            padding: 10px; margin: 0;
+        }
+        #menu{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background-color: grey;
+            width: max-content;
+        }
+        #menu::before{
+            background-color: red;
+        }
+    </style>
+    <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Fury Fighter - Pick a Character</title>
+</head>
+<body>
+    <div class="hero">
+        <a>Fury Fighters</a>
+    </div>
+
+    <div class="sectionB">
+        <div id="menu">
+            <a>Pick your Game Mode</a>
+        </div>
+    </div>
+</body>
+</html>
