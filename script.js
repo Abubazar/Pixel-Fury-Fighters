@@ -9,6 +9,7 @@ char.src = "assets/Lizen/Idle.png"
 
 char.onload = function(){requestAnimationFrame(playIdle)}
 
+
 frame = 0
 totalFrames = 9
 frameWidth = 162
@@ -31,4 +32,10 @@ const deltaTime = (ctime - lastTime)/1000
         lastTime = ctime
     }
     requestAnimationFrame(playIdle)
+}
+
+const dialog = document.getElementById("dialog")
+const dialogBox = document.getElementById("dialog-box")
+function playGame(mode){
+    if(mode==0){}
 }

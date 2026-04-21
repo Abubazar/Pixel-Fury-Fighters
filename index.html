@@ -8,19 +8,34 @@
 </head>
 
 <style>
+        @font-face {
+        font-family: pixel;
+        src: url("assets/font.otf");}
+
         body{
             padding: 0;
             margin:0;
-            font-family: monospace;
+            font-family: pixel;
             margin:0;
             height: 100vh;
             display:flex;
             flex-direction: column;
         }
+        button{
+            font-family: pixel;
+            padding: 10px;
+            background-color: rgb(72, 72, 72);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            letter-spacing: 1px;
+            transition: all 0.3 ease;
+        }
         .hero{
             display: flex;
             align-items: center;
             justify-content:center;
+            letter-spacing: 2px;
             
             font-weight: 800;
             font-size: large;
@@ -31,21 +46,63 @@
         .sectionB{
             display:flex;
             justify-content: left;
-            gap: 50px;
+            gap: 5px;
+            flex: 1;
         }
         #menu{
             display:flex;
+            flex-direction: column;
             align-items:center;
             justify-content:center;
             background-color: grey;
             width: max-content;
-            height: 400px;
+            flex: 1;
+            gap: 10px;
+            padding: 5px;
+        }
+        .deco{
+            display: flex;
+            align-items: center;
+            flex: 1;
         }
         canvas{
             background-color: grey;
             width: 200px;
             height: 200px;
+            margin: 50px;
+            border-radius: 10px;
         }
+
+        @keyframes bounce {
+            0% {transform:rotate(10deg);}
+            30% {transform:rotate(-5deg);}
+            60% {transform:rotate(5deg);}
+            90% {transform:rotate(0deg);}
+        }
+
+        button:hover{
+            animation: bounce 0.5s;
+        }
+
+        #dialog{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.398);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+        }
+        #dialog-box{
+            background-color: grey;
+            padding:10px;
+            border-radius: 6px;
+        }
+
+        footer{padding: 2px; font-size: small;}
     </style>
 
 <body>
@@ -57,11 +114,23 @@
 
         <div id="menu">
             <a>Pick your Game Mode</a>
+            <button onclick="playGamge(0)">1 Player VS 1 Computer</button>
+            <button onclick="playGamge(1)">1 Player VS 1 Player</button>
+            <button onclick="playGamge(2)">1 Player Squad VS 1Computer Squad</button>
+            <button onclick="playGamge(3)">2 Player VS 1 Computer Squad</button>
+            <button onclick="playGamge(4)">Settings</button>
         </div>
 
-        <div id="deco">
+        <div class="deco">
             <canvas id="lookhole"></canvas>
         </div>
+    </div>
+
+
+
+
+    <div id="dialog">
+        <div id="dialog-box"></div>
     </div>
     <footer><a>Special thanks to </a> <a href="https://itch.io/profile/luizmelo">luizmelo</a> <a> for the free characters</a></footer>
 </body>
