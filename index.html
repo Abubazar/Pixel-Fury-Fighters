@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
+    <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Fury Fighter - Pick a Character</title>
+</head>
+
+<style>
         body{
             padding: 0;
             margin:0;
             font-family: monospace;
+            margin:0;
+            height: 100vh;
+            display:flex;
+            flex-direction: column;
         }
         .hero{
             display: flex;
@@ -18,22 +28,26 @@
             background-color: rgb(255, 94, 0);
             padding: 10px; margin: 0;
         }
+        .sectionB{
+            display:flex;
+            justify-content: left;
+            gap: 50px;
+        }
         #menu{
             display:flex;
             align-items:center;
             justify-content:center;
             background-color: grey;
             width: max-content;
+            height: 400px;
         }
-        #menu::before{
-            background-color: red;
+        canvas{
+            background-color: grey;
+            width: 200px;
+            height: 200px;
         }
     </style>
-    <script src="script.js" defer></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Fury Fighter - Pick a Character</title>
-</head>
+
 <body>
     <div class="hero">
         <a>Fury Fighters</a>
