@@ -24,6 +24,7 @@ class Sprite{
         this.velocityX=0
         this.height=200
         this.touchGrass=false
+        this.isAttacking = false
     }
 
     update(delta){
@@ -59,7 +60,9 @@ const entities = []
 entities.push(new Sprite(100,20,entities.length))
 players.push(0)
 entities.push(new Sprite(1100,30,entities.length))
-enemy1 = new EnemyController(1,1)
+entities.push(new Sprite(800,30,entities.length))
+enemy1 = new EnemyController(1,3)
+enemy2 = new EnemyController(2,2)
 
 function sal(){entities[0].move('right')}
 
@@ -82,6 +85,7 @@ function KeyboardUpdate(){
     
     if(keysBoard.left){entities[0].move('left')}
     else if(keysBoard.right){entities[0].move('right')}
+    else if(keysBoard.o){entities[0].isAttacking=true}
     else{entities[0].move('none')}
 }
 
@@ -95,7 +99,8 @@ function render(){
 }
 function update(delta){
     KeyboardUpdate()
-    enemy1.update()
+    enemy1.update(delta)
+    enemy2.update(delta)
     for(let i=0; i<entities.length; i++){
         entities[i].update(delta)
     }

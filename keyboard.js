@@ -16,26 +16,26 @@ window.addEventListener('keydown', (e) =>{
         keysBoard.left=true
     }
     if (key == 'KeyO'){
-        keysBoard.left=true
+        keysBoard.o=true
     }
     if (key == 'KeyP'){
-        keysBoard.left=true
+        keysBoard.p=true
     }
 
     if (key == 'KeyW'){
-        keysBoard.left=true
+        keysBoard.w=true
     }
     if (key == 'KeyA'){
-        keysBoard.left=true
+        keysBoard.a=true
     }
     if (key == 'KeyD'){
-        keysBoard.left=true
+        keysBoard.d=true
     }
     if (key == 'KeyR'){
-        keysBoard.left=true
+        keysBoard.r=true
     }
     if (key == 'KeyT'){
-        keysBoard.left=true
+        keysBoard.t=true
     }
 })
 
@@ -53,26 +53,26 @@ window.addEventListener('keyup', (e) =>{
         keysBoard.left=false
     }
     if (key == 'KeyO'){
-        keysBoard.left=false
+        keysBoard.o=false
     }
     if (key == 'KeyP'){
-        keysBoard.left=false
+        keysBoard.p=false
     }
 
     if (key == 'KeyW'){
-        keysBoard.left=false
+        keysBoard.w=false
     }
     if (key == 'KeyA'){
-        keysBoard.left=false
+        keysBoard.a=false
     }
     if (key == 'KeyD'){
-        keysBoard.left=false
+        keysBoard.d=false
     }
     if (key == 'KeyR'){
-        keysBoard.left=false
+        keysBoard.r=false
     }
     if (key == 'KeyT'){
-        keysBoard.left=false
+        keysBoard.t=false
     }
 })
 
