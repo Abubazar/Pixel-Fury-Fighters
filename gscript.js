@@ -65,7 +65,7 @@ const Kiara = {};
 
 const Kimal = {};
 ["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
-  Kimal[name] = [new Image(),100]
+  Kimal[name] = [new Image(),200]
   Kimal[name][0].src = `assets/Kimal/${name}.png`
 })
 
@@ -77,7 +77,7 @@ const Lizen = {};
 
 const Zaruto = {};
 ["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
-  Zaruto[name] = [new Image(),100]
+  Zaruto[name] = [new Image(),200]
   Zaruto[name][0].src = `assets/Zaruto/${name}.png`
 })
 
@@ -99,13 +99,16 @@ class Sprite{
         this.frame=0
         this.stepCount=0
         this.character=character
-        this.canSwitch=true
+        this.attacking=false
+        this.atType=1
     }
 
-    attack(){
-        if(this.canSwitch){
-            const type = getRandomInt(1,2)
-            this.animation='Attack'+type
+    attack(type){
+        if(!this.attacking){
+            this.frame=0
+            this.atType=type
+            this.attacking=true
+            console.log(9)
         }
     }
 
@@ -114,7 +117,7 @@ class Sprite{
 
         this.velocityY+=gravity
         this.y+=this.velocityY*delta
-        if(this.y > ground){
+        if(this.y >= ground){
             this.y=ground
             this.velocityY=0
             this.touchGrass=true
@@ -122,6 +125,20 @@ class Sprite{
         else{this.touchGrass=false}
     }
     draw(){
+        
+        this.animation='Idle'
+
+        if(this.velocityX!=0){this.animation='Run'}
+
+        if(!this.touchGrass){
+            this.animation = 'Jump'
+        }
+        if(this.attacking){
+            this.animation='Attack'+this.atType
+            if(this.frame>=this.totalFrames-1){this.attacking=false; this.animation='Idle'}
+        }
+
+
         const anim = this.animation
         const image = this.character[anim][0]
         const width = this.character[anim][1]
@@ -131,9 +148,7 @@ class Sprite{
             this.frame = (this.frame+1)%this.totalFrames
             this.stepCount=0
         }
-        if(this.anim=='Attack1' || this.anim=='Attack2'){
-            if(this.frame==this.totalFrames){this.canSwitch=true; this.animation='Idle'}
-        }
+
         UpDrawImage(image,this.x-500,this.y-620,this.flipX,1000,1000,width,image.height,this.frame)
         
         ctx.fillStyle='rgba(255,0,0,0.5)'
@@ -144,7 +159,7 @@ class Sprite{
         if(this.touchGrass){this.velocityY=-1800}
     }
     move(dir){
-        const speed = 400
+        const speed = 600
         if(dir=='left'){this.velocityX=-speed; this.flipX=true}
         else if(dir=='right'){this.velocityX=speed; this.flipX = false}
         else{this.velocityX=0}
@@ -156,9 +171,9 @@ const entities = []
 
 entities.push(new Sprite(100,20,entities.length,Lizen))
 players.push(0)
-entities.push(new Sprite(1100,30,entities.length,Kiara))
-entities.push(new Sprite(800,30,entities.length,Axel))
-enemy1 = new EnemyController(1,3)
+entities.push(new Sprite(1100,30,entities.length,Zaruto))
+entities.push(new Sprite(800,30,entities.length,Kimal))
+enemy1 = new EnemyController(1,4)
 enemy2 = new EnemyController(2,2)
 
 function sal(){entities[0].move('right')}
@@ -182,7 +197,7 @@ function KeyboardUpdate(){
     
     if(keysBoard.left){entities[0].move('left')}
     else if(keysBoard.right){entities[0].move('right')}
-    else if(keysBoard.o){entities[0].isAttacking=true}
+    else if(keysBoard.o){entities[0].attack(1)}
     else{entities[0].move('none')}
 }
 

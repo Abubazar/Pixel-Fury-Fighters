@@ -48,7 +48,7 @@ class EnemyController{
 
             // INTENT
             if (this.intent === "none"){
-                const engageChance = 0.08 + this.difficulty * 0.12
+                const engageChance = 0.01 + this.difficulty * 0.1
 
                 if (Math.random() < engageChance){
                     this.intent = "attack"
@@ -105,31 +105,42 @@ class EnemyController{
                     const lowHealth = this.hp < 30
                     const playerAttacking = player.isAttacking
 
-                    let retreatChance = 0
+                    // Strong bias toward fighting
+                    let fightChance = 0.6 + this.difficulty * 0.25
 
-                    if (lowHealth) retreatChance += 0.4
-                    if (playerAttacking) retreatChance += 0.3
-                    retreatChance += (1 - this.difficulty * 0.2)
+                    // Reduce aggression in bad situations
+                    if (lowHealth) fightChance -= 0.25
+                    if (playerAttacking) fightChance -= 0.15
 
-                    const hesitation =
-                        0.15 + (1 - this.difficulty * 0.2)
+                    // Slight hesitation only on low difficulty
+                    let hesitation = 0.15 * (1 - this.difficulty * 0.2)
+
+                    if (distance < 150){
+                        fightChance += 0.2
+                        hesitation *= 0.3
+                    }
 
                     if (Math.random() < hesitation){
                         newAction = "idle"
                     }
-                    else if (Math.random() < retreatChance){
+                    else if (Math.random() < fightChance){
+                        newAction = "fight"
+                    }
+                    else {
                         newAction = "retreat"
                         this.intent = "none"
-                    } else {
-                        newAction = "fight"
                     }
                 }
             }
 
             if (this.action !== newAction){
-                if (this.stateTime <= 0 || this.intent === "attack"){
+
+                const forceImmediate =
+                    distance < 150 && newAction === "fight"
+
+                if (forceImmediate || this.stateTime <= 0 || this.intent === "attack"){
                     this.action = newAction
-                    this.stateTime = 0.4 + Math.random() * 0.3
+                    this.stateTime = 0.3 + Math.random() * 0.2
                 }
             }
         }
@@ -175,12 +186,7 @@ class EnemyController{
         //--ATTACK
         if (this.action === "fight"){
 
-            if (this.attackCooldown <= 0){
-                this.enemy.attack?.()
-
-                this.attackCooldown =
-                    1.2 - (this.difficulty * 0.2)
-            }
+            this.enemy.attack(getRandomInt(1,2))
         }
 
     }
