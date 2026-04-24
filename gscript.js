@@ -15,7 +15,6 @@ const FPS=60
 const gravity = 100
 const animSpeed=5
 const ground = 650
-const players = []
 
 function UpDrawImage(img, x, y, flipX, width, height, fsW,fsH, frame) {
     if (!img.complete) return
@@ -133,8 +132,9 @@ class Sprite{
     }
 
     update(delta){
-        this.x+=this.velocityX*delta
-
+        this.x += this.velocityX*delta
+        this.x = Math.max(50, Math.min(1230, this.x))
+        
         this.velocityY+=gravity
         this.y+=this.velocityY*delta
         if(this.y >= ground){
@@ -219,11 +219,12 @@ const entities = []
 
 
 entities.push(new Sprite(100,20,entities.length,Lizen))
-entities.push(new Sprite(1100,30,entities.length,Zaruto))
+entities.push(new Sprite(1230,30,entities.length,Kiara))
 entities[0].opponent = entities[1]
 entities[1].opponent = entities[0]
-enemy = new EnemyController(1,4)
+
 player = 0
+player2 = new EnemyController(1,4)
 
 function sal(){entities[0].move('right')}
 
@@ -256,19 +257,21 @@ function KeyboardUpdate(){
 function render(){
     ctx.imageSmoothingEnabled = false
     canvas.style.imageRendering = "pixelated"
-    ctx.clearRect(0,0,canvas.width,canvas.height)
-    ctx.drawImage(bg,0,-3850,2784*2,2379*2)
+    ctx.clearRect(0, 0,canvas.width,canvas.height)
+    ctx.drawImage(bg,-1000,-3850,2784*2,2379*2)
     ctx.fillStyle = 'green'
-    ctx.fillRect(0,ground-3,1500,600)
+    ctx.fillRect(-1000,ground-3,9000,600)
     ctx.fillStyle = 'rgb(11, 12, 17)'
-    ctx.fillRect(0,ground+7,1500,600)
+    ctx.fillRect(-1000,ground+4,9000,600)
+
     for(let i=0; i<entities.length; i++){
         entities[i].draw()
     }
 }
+
 function update(delta){
     KeyboardUpdate()
-    enemy.update(delta)
+    player2.update(delta)
     for(let i=0; i<entities.length; i++){
         entities[i].update(delta)
     }

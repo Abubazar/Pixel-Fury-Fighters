@@ -18,6 +18,7 @@ class EnemyController{
 
         this.hp = entities[spriteId].hp
 
+        this.enemy.flipX=true
         this.attackCooldown = 0
         this.dodgeCooldown = 0
         this.jumpCooldown = 0
