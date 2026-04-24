@@ -116,19 +116,23 @@ class Sprite{
         this.opponent = null
         this.attacked=false
         this.hp=100
+        this.alive=true
     }
 
     attack(type){
-        if(!this.attacking){
-            this.frame=0
-            this.atType=type
-            this.attacking=true
+        if(this.alive){
+            if(!this.attacking){
+                this.frame=0
+                this.atType=type
+                this.attacking=true
+            }
         }
     }
 
     hurt(){
         console.log('hurt')
         this.hp-=5
+        if(this.hp<=0){this.alive=false; this.frame=0}
     }
 
     update(delta){
@@ -175,16 +179,22 @@ class Sprite{
             if(this.frame>=this.totalFrames-1){this.attacking=false; this.animation='Idle'; this.attacked=false}
         }
 
+        if(!this.alive){
+            this.animation="Death"
+        }
 
         const anim = this.animation
         const image = this.character[anim][0]
         const width = this.character[anim][1]
         this.totalFrames = image.width/width
         this.stepCount+=1
-        if(this.stepCount>=animSpeed){
+        if(!this.alive && this.frame==this.totalFrames-1){
+        }
+        else if(this.stepCount>=animSpeed){
             this.frame = (this.frame+1)%this.totalFrames
             this.stepCount=0
         }
+        
 
         UpDrawImage(image,this.x-500,this.y-620,this.flipX,1000,1000,width,image.height,this.frame)
         
@@ -205,13 +215,17 @@ class Sprite{
     }
 
     jump(){
-        if(this.touchGrass){this.velocityY=-1800; this.fame = 0}
+        if(this.alive){
+            if(this.touchGrass){this.velocityY=-1800; this.fame = 0}
+        }
     }
     move(dir){
-        const speed = 600
-        if(dir=='left'){this.velocityX=-speed; this.flipX=true}
-        else if(dir=='right'){this.velocityX=speed; this.flipX = false}
-        else{this.velocityX=0}
+        if(this.alive){
+            const speed = 600
+            if(dir=='left'){this.velocityX=-speed; this.flipX=true}
+            else if(dir=='right'){this.velocityX=speed; this.flipX = false}
+            else{this.velocityX=0}
+        }
     }
 }
 
@@ -226,7 +240,6 @@ entities[1].opponent = entities[0]
 player = 0
 player2 = new EnemyController(1,4)
 
-function sal(){entities[0].move('right')}
 
 
 const keysBoard = {
@@ -253,6 +266,29 @@ function KeyboardUpdate(){
 }
 
 
+function displayUI(){
+    //520
+    let hb1 = 60
+    let hb2 = 700
+    hb1=entities[0].hp*5.2
+    hb2=entities[1].hp*5.2
+    
+    ctx.fillStyle = "rgb(210, 210, 210)"
+    ctx.fillRect(50,50,1180,60)
+
+    ctx.fillStyle = "rgb(126, 125, 125)"
+    ctx.fillRect(60,60,520,40)
+    ctx.fillRect(700,60,520,40)
+
+    ctx.fillStyle = "rgb(194, 43, 43)"
+    ctx.fillRect(60+(520-hb1),60,hb1,40)
+
+    ctx.fillRect(700,60,hb2,40)
+
+    ctx.fillStyle = "rgb(210, 210, 210)"
+    ctx.fillRect(580,40,120,80)
+}
+
 
 function render(){
     ctx.imageSmoothingEnabled = false
@@ -267,6 +303,7 @@ function render(){
     for(let i=0; i<entities.length; i++){
         entities[i].draw()
     }
+    displayUI()
 }
 
 function update(delta){
