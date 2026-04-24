@@ -16,7 +16,7 @@ class EnemyController{
         this.action = "idle"
         this.intent = "none"
 
-        this.hp = 100
+        this.hp = entities[spriteId].hp
 
         this.attackCooldown = 0
         this.dodgeCooldown = 0
@@ -27,8 +27,9 @@ class EnemyController{
     }
 
     update(delta){
-        let player = entities[players[0]]
+        let player = entities[0]
 
+        this.hp=this.enemy.hp
         const dx = player.x - this.enemy.x
         const dy = player.y - this.enemy.y
         const distance = Math.abs(dx)
@@ -124,7 +125,7 @@ class EnemyController{
                         newAction = "idle"
                     }
                     else if (Math.random() < fightChance){
-                        newAction = "fight"
+                        if(this.enemy.opponent.hp>0){newAction = "fight"}
                     }
                     else {
                         newAction = "retreat"

@@ -45,43 +45,56 @@ function UpDrawImage(img, x, y, flipX, width, height, fsW,fsH, frame) {
 }
 
 //--CHARACTER IMAGES
+
+const allImages = []
+
+
 const Axel = {};
 ["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
   Axel[name] = [new Image(),135]
   Axel[name][0].src = `assets/Axel/${name}.png`
-})
-
-const Guantano = {};
-["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
-  Guantano[name] = [new Image(),126]
-  Guantano[name][0].src = `assets/Guantano/${name}.png`
+  allImages.push(Axel[name][0])
 })
 
 const Kiara = {};
 ["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
   Kiara[name] = [new Image(),150]
   Kiara[name][0].src = `assets/Kiara/${name}.png`
+  allImages.push(Kiara[name][0])
 })
 
 const Kimal = {};
 ["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
   Kimal[name] = [new Image(),200]
   Kimal[name][0].src = `assets/Kimal/${name}.png`
+  allImages.push(Kimal[name][0])
 })
 
 const Lizen = {};
 ["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
   Lizen[name] = [new Image(),162]
   Lizen[name][0].src = `assets/Lizen/${name}.png`
+  allImages.push(Lizen[name][0])
 })
 
 const Zaruto = {};
 ["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
   Zaruto[name] = [new Image(),200]
   Zaruto[name][0].src = `assets/Zaruto/${name}.png`
+  allImages.push(Zaruto[name][0])
 })
 
+const bg = new Image(); bg.src = "assets/Background.png"
+allImages.push(bg)
 
+imagesLoaded = 0
+for(let i=0; i<allImages.length; i++){
+    allImages[i].onload = function(){
+        imagesLoaded+=1
+        if(imagesLoaded==allImages.length){requestAnimationFrame(gameLoop)}
+    }
+    
+}
 
 class Sprite{
     constructor(x, y, id, character){
@@ -92,7 +105,6 @@ class Sprite{
         this.velocityX=0
         this.height=200
         this.touchGrass=false
-        this.isAttacking = false
         this.animation='Idle'
         this.flipX=false
         this.totalFrames=0
@@ -101,6 +113,10 @@ class Sprite{
         this.character=character
         this.attacking=false
         this.atType=1
+        this.atp = 2
+        this.opponent = null
+        this.attacked=false
+        this.hp=100
     }
 
     attack(type){
@@ -108,8 +124,12 @@ class Sprite{
             this.frame=0
             this.atType=type
             this.attacking=true
-            console.log(9)
         }
+    }
+
+    hurt(){
+        console.log('hurt')
+        this.hp-=5
     }
 
     update(delta){
@@ -123,6 +143,23 @@ class Sprite{
             this.touchGrass=true
         }
         else{this.touchGrass=false}
+
+        let side
+        if(this.attacking && this.frame>=this.atp && this.frame<=this.atp+2){
+            if(!this.flipX){side=140}
+            else{side=-200}
+            if (
+            !(
+                (this.x - 60 + side) > (this.opponent.x + 50) ||
+                (this.x - 60 + side + 180) < (this.opponent.x - 50) ||
+                (this.y - this.height - 40) > (this.opponent.y - this.opponent.height + this.opponent.height) ||
+                (this.y - this.height - 40 + 160) < (this.opponent.y - this.opponent.height)
+            )
+            ) {
+            // overlapping
+            if(!this.attacked){this.opponent.hurt(); this.attacked=true}
+            }
+        }
     }
     draw(){
         
@@ -135,7 +172,7 @@ class Sprite{
         }
         if(this.attacking){
             this.animation='Attack'+this.atType
-            if(this.frame>=this.totalFrames-1){this.attacking=false; this.animation='Idle'}
+            if(this.frame>=this.totalFrames-1){this.attacking=false; this.animation='Idle'; this.attacked=false}
         }
 
 
@@ -151,12 +188,24 @@ class Sprite{
 
         UpDrawImage(image,this.x-500,this.y-620,this.flipX,1000,1000,width,image.height,this.frame)
         
-        ctx.fillStyle='rgba(255,0,0,0.5)'
+        ctx.fillStyle='rgba(255, 0, 0, 0.5)'
         ctx.fillRect(this.x-50,this.y-this.height,100,this.height)
+        if(this.attacking){
+            let side
+            if(this.frame>=this.atp && this.frame<=this.atp+2){
+                if(!this.flipX){side=140}
+                else{side=-200}
+                ctx.fillStyle='rgba(0, 255, 0, 0.5)'
+                ctx.fillRect((this.x-60)+side,this.y-this.height-40,180,160)
+            }
+        }
+        
+        ctx.fillStyle='rgb(255, 255, 255)'
+        ctx.fillRect(this.x-2,this.y-2,4,4)
     }
 
     jump(){
-        if(this.touchGrass){this.velocityY=-1800}
+        if(this.touchGrass){this.velocityY=-1800; this.fame = 0}
     }
     move(dir){
         const speed = 600
@@ -170,11 +219,11 @@ const entities = []
 
 
 entities.push(new Sprite(100,20,entities.length,Lizen))
-players.push(0)
 entities.push(new Sprite(1100,30,entities.length,Zaruto))
-entities.push(new Sprite(800,30,entities.length,Kimal))
-enemy1 = new EnemyController(1,4)
-enemy2 = new EnemyController(2,2)
+entities[0].opponent = entities[1]
+entities[1].opponent = entities[0]
+enemy = new EnemyController(1,4)
+player = 0
 
 function sal(){entities[0].move('right')}
 
@@ -193,12 +242,13 @@ const keysBoard = {
     t:false,
 }
 function KeyboardUpdate(){
-    if(keysBoard.up){entities[0].jump()}
+    if(keysBoard.up){entities[player].jump()}
     
-    if(keysBoard.left){entities[0].move('left')}
-    else if(keysBoard.right){entities[0].move('right')}
-    else if(keysBoard.o){entities[0].attack(1)}
-    else{entities[0].move('none')}
+    if(keysBoard.left){entities[player].move('left')}
+    else if(keysBoard.right){entities[player].move('right')}
+    else if(keysBoard.o){entities[player].attack(1)}
+    else if(keysBoard.p){entities[player].attack(2)}
+    else{entities[player].move('none')}
 }
 
 
@@ -207,16 +257,18 @@ function render(){
     ctx.imageSmoothingEnabled = false
     canvas.style.imageRendering = "pixelated"
     ctx.clearRect(0,0,canvas.width,canvas.height)
+    ctx.drawImage(bg,0,-3850,2784*2,2379*2)
     ctx.fillStyle = 'green'
-    ctx.fillRect(0,ground,1500,600)
+    ctx.fillRect(0,ground-3,1500,600)
+    ctx.fillStyle = 'rgb(11, 12, 17)'
+    ctx.fillRect(0,ground+7,1500,600)
     for(let i=0; i<entities.length; i++){
         entities[i].draw()
     }
 }
 function update(delta){
     KeyboardUpdate()
-    enemy1.update(delta)
-    enemy2.update(delta)
+    enemy.update(delta)
     for(let i=0; i<entities.length; i++){
         entities[i].update(delta)
     }
@@ -238,4 +290,3 @@ function gameLoop(ctime){
 
     requestAnimationFrame(gameLoop)
 }
-requestAnimationFrame(gameLoop)
