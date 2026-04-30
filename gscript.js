@@ -15,6 +15,9 @@ const FPS=60
 const gravity = 100
 const animSpeed=5
 const ground = 650
+let plr1Score = 0
+let plr2Score = 0
+let gameRound = 1
 
 function UpDrawImage(img, x, y, flipX, width, height, fsW,fsH, frame) {
     if (!img.complete) return
@@ -116,19 +119,23 @@ class Sprite{
         this.opponent = null
         this.attacked=false
         this.hp=100
+        this.alive=true
     }
 
     attack(type){
-        if(!this.attacking){
-            this.frame=0
-            this.atType=type
-            this.attacking=true
+        if(this.alive){
+            if(!this.attacking){
+                this.frame=0
+                this.atType=type
+                this.attacking=true
+            }
         }
     }
 
     hurt(){
         console.log('hurt')
         this.hp-=5
+        if(this.hp<=0 && this.alive){this.alive=false; this.frame=0; roundEnd(this.id)}
     }
 
     update(delta){
@@ -175,28 +182,34 @@ class Sprite{
             if(this.frame>=this.totalFrames-1){this.attacking=false; this.animation='Idle'; this.attacked=false}
         }
 
+        if(!this.alive){
+            this.animation="Death"
+        }
 
         const anim = this.animation
         const image = this.character[anim][0]
         const width = this.character[anim][1]
         this.totalFrames = image.width/width
         this.stepCount+=1
-        if(this.stepCount>=animSpeed){
+        if(!this.alive && this.frame==this.totalFrames-1){
+        }
+        else if(this.stepCount>=animSpeed){
             this.frame = (this.frame+1)%this.totalFrames
             this.stepCount=0
         }
+        
 
         UpDrawImage(image,this.x-500,this.y-620,this.flipX,1000,1000,width,image.height,this.frame)
         
-        ctx.fillStyle='rgba(255, 0, 0, 0.5)'
-        ctx.fillRect(this.x-50,this.y-this.height,100,this.height)
+        // ctx.fillStyle='rgba(255, 0, 0, 0.5)'
+        // ctx.fillRect(this.x-50,this.y-this.height,100,this.height)
         if(this.attacking){
             let side
             if(this.frame>=this.atp && this.frame<=this.atp+2){
                 if(!this.flipX){side=140}
                 else{side=-200}
-                ctx.fillStyle='rgba(0, 255, 0, 0.5)'
-                ctx.fillRect((this.x-60)+side,this.y-this.height-40,180,160)
+                // ctx.fillStyle='rgba(0, 255, 0, 0.5)'
+                // ctx.fillRect((this.x-60)+side,this.y-this.height-40,180,160)
             }
         }
         
@@ -205,28 +218,66 @@ class Sprite{
     }
 
     jump(){
-        if(this.touchGrass){this.velocityY=-1800; this.fame = 0}
+        if(this.alive){
+            if(this.touchGrass){this.velocityY=-1800; this.fame = 0}
+        }
     }
     move(dir){
-        const speed = 600
-        if(dir=='left'){this.velocityX=-speed; this.flipX=true}
-        else if(dir=='right'){this.velocityX=speed; this.flipX = false}
-        else{this.velocityX=0}
+        if(this.alive){
+            const speed = 600
+            if(dir=='left'){this.velocityX=-speed; this.flipX=true}
+            else if(dir=='right'){this.velocityX=speed; this.flipX = false}
+            else{this.velocityX=0}
+        }
     }
 }
 
 const entities = []
+let player1, player2
+switch(localStorage.getItem('player1')){
+    case 'Axel':
+        player1=Axel;
+        break;
+    case 'Kiara':
+        player1=Kiara;
+        break;
+    case 'Kimal':
+        player1=Kimal;
+        break;
+    case 'Lizen':
+        player1=Lizen;
+        break;
+    case 'Zaruto':
+        player1=Zaruto;
+        break;
+}
 
+switch(localStorage.getItem('player2')){
+    case 'Axel':
+        player2=Axel;
+        break;
+    case 'Kiara':
+        player2=Kiara;
+        break;
+    case 'Kimal':
+        player2=Kimal;
+        break;
+    case 'Lizen':
+        player2=Lizen;
+        break;
+    case 'Zaruto':
+        player2=Zaruto;
+        break;
+}
 
-entities.push(new Sprite(100,20,entities.length,Lizen))
-entities.push(new Sprite(1230,30,entities.length,Kiara))
+entities.push(new Sprite(100,20,entities.length,player1))
+entities.push(new Sprite(1230,30,entities.length,player2))
 entities[0].opponent = entities[1]
 entities[1].opponent = entities[0]
 
 player = 0
 player2 = new EnemyController(1,4)
 
-function sal(){entities[0].move('right')}
 
 
 const keysBoard = {
@@ -253,6 +304,73 @@ function KeyboardUpdate(){
 }
 
 
+function displayUI(){
+    //520
+    let hb1 = 60
+    let hb2 = 700
+    hb1=entities[0].hp*5.2
+    hb2=entities[1].hp*5.2
+    
+    ctx.fillStyle = "rgb(210, 210, 210)"
+    ctx.fillRect(50,50,1180,60)
+
+    ctx.fillStyle = "rgb(126, 125, 125)"
+    ctx.fillRect(60,60,520,40)
+    ctx.fillRect(700,60,520,40)
+
+    ctx.fillStyle = "rgb(194, 43, 43)"
+    ctx.fillRect(60+(520-hb1),60,hb1,40)
+
+    ctx.fillRect(700,60,hb2,40)
+
+    ctx.fillStyle = "rgb(210, 210, 210)"
+    ctx.fillRect(580,40,120,80)
+
+    const gameMode = localStorage.getItem("mode")
+    ctx.font = "50px pixel";
+
+    ctx.fillStyle = "rgb(210, 210, 210)"
+    ctx.fillRect(50,5,180,55)
+
+    ctx.fillStyle = "blue"
+    ctx.fillText('Human',65,50)
+
+    if(gameMode=='0' || gameMode=='2'){
+        ctx.fillStyle = "rgb(210, 210, 210)"
+        ctx.fillRect(1050,5,180,55)
+
+        ctx.fillStyle = "green"
+        ctx.fillText('Cmptr',1070,50)
+
+    }
+    else if(gameMode=='1' || gameMode=='3'){
+        ctx.fillStyle = "rgb(210, 210, 210)"
+        ctx.fillRect(1050,5,180,55)
+
+        ctx.fillStyle = "green"
+        ctx.fillText('Human',1070,50)
+
+    }
+
+    ctx.fillStyle = "rgb(73, 73, 73)"
+    ctx.fillText(plr1Score,590,100)
+    ctx.fillText(plr2Score,665,100)
+
+    ctx.fillStyle = "rgba(205, 205, 205, 0.68)"
+    ctx.font='70px pixel'
+    const txtpos = (canvas.width/2)-(ctx.measureText('Round '+gameRound).width/2)
+    ctx.fillText('Round '+gameRound,txtpos,180)
+}
+
+function roundEnd(loser){
+    if(loser==0){
+        plr2Score+=1
+    }
+    else if(loser==1){
+        plr1Score+=1
+    }
+}
+
 
 function render(){
     ctx.imageSmoothingEnabled = false
@@ -267,6 +385,7 @@ function render(){
     for(let i=0; i<entities.length; i++){
         entities[i].draw()
     }
+    displayUI()
 }
 
 function update(delta){
@@ -279,6 +398,7 @@ function update(delta){
 
 
 
+//-=GAME LOOP=-
 let lastTime = 0
 const timestep = 1000/FPS
 

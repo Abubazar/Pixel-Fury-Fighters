@@ -13,8 +13,12 @@ char.onload = function(){requestAnimationFrame(playIdle)}
 frame = 0
 totalFrames = 9
 frameWidth = 162
-animSpeed=5
-step =0
+animSpeed = 5
+step = 0
+
+player1 = 'none'
+player2 = 'none'
+enemyMode = 0
 
 let lastTime = 0
 const FPS = 60
@@ -35,7 +39,70 @@ const deltaTime = (ctime - lastTime)/1000
 }
 
 const dialog = document.getElementById("dialog")
-const dialogBox = document.getElementById("dialog-box")
+const dialogBox = document.getElementById("dia-area")
+
+currentgamemode=0
 function playGame(mode){
-    if(mode==0){}
+    dialog.style.visibility = 'visible'
+    dialogBox.style.visibility='visible'
+    currentgamemode=mode
+    if(mode==0){
+        document.getElementById('player1Desc').textContent = "Player1 (Human)"
+        document.getElementById('player2Desc').textContent = "Player2 (Computer)"
+    }
+    else if(mode==1){
+        document.getElementById('player1Desc').textContent = "Player1 (Human)"
+        document.getElementById('player2Desc').textContent = "Player2 (Human)"
+    }
+    if(mode==2){
+        dialogBox.style.visibility='hidden'
+    }
+}
+
+function cancelDia(){
+    dialog.style.visibility='hidden'
+    dialogBox.style.visibility='hidden'
+
+    if(player1==null){}
+    else{
+        document.getElementById(player1+'ch1').style.backgroundColor="rgb(72, 72, 72)"
+        
+    }
+    if(player2==null){}
+    else{
+        document.getElementById(player2+'ch2').style.backgroundColor="rgb(72, 72, 72)"
+        
+    }
+}
+
+let lastChar
+function player1Char(character){
+    if(lastChar==null){lastChar=character}
+    else{
+        document.getElementById(lastChar+'ch1').style.backgroundColor="rgb(72, 72, 72)"
+        
+    }
+    document.getElementById(character+'ch1').style.backgroundColor="rgb(207, 207, 207)"
+    lastChar=character
+    player1=character
+}
+
+let lastChar2
+function player2Char(character){
+    if(lastChar2==null){lastChar2=character}
+    else{
+        document.getElementById(lastChar2+'ch2').style.backgroundColor="rgb(72, 72, 72)"
+        
+    }
+    document.getElementById(character+'ch2').style.backgroundColor="rgb(207, 207, 207)"
+    lastChar2=character
+    player2=character
+}
+
+
+function enterGame(){
+    localStorage.setItem('player1', player1)
+    localStorage.setItem('player2', player2)
+    localStorage.setItem('mode', currentgamemode)
+    window.location.href = "game.html"
 }
