@@ -1,40 +1,56 @@
-if (localStorage.getItem('')){}
 
+let allKeys = {
+    left:'ArrowLeft',
+    right:'ArrowRight',
+    jump:'ArrowUp',
+    att1:'KeyO',
+    att2:'KeyP',
 
+    left1:'KeyA',
+    right1:'KeyD',
+    jump1:'KeyW',
+    att11:'KeyR',
+    att12:'KeyT',
+}
 
+if(localStorage.getItem('keysMap')){
+    allKeys = JSON.parse(localStorage.getItem('keysMap'))
+}
 
 window.addEventListener('keydown', (e) =>{
     const key = e.code
 
-    if (key == 'ArrowUp'){
+    //--PLAYER 1
+    if (key == allKeys.jump){
         keysBoard.up=true
     }
-    if (key == 'ArrowRight'){
+    if (key == allKeys.right){
         keysBoard.right=true
     }
-    if (key == 'ArrowLeft'){
+    if (key == allKeys.left){
         keysBoard.left=true
     }
-    if (key == 'KeyO'){
+    if (key == allKeys.att1){
         keysBoard.o=true
     }
-    if (key == 'KeyP'){
+    if (key == allKeys.att2){
         keysBoard.p=true
     }
 
-    if (key == 'KeyW'){
+    //--PLAYER 2
+    if (key == allKeys.jump1){
         keysBoard.w=true
     }
-    if (key == 'KeyA'){
+    if (key == allKeys.left1){
         keysBoard.a=true
     }
-    if (key == 'KeyD'){
+    if (key == allKeys.right1){
         keysBoard.d=true
     }
-    if (key == 'KeyR'){
+    if (key == allKeys.att11){
         keysBoard.r=true
     }
-    if (key == 'KeyT'){
+    if (key == allKeys.att12){
         keysBoard.t=true
     }
 })
@@ -43,35 +59,37 @@ window.addEventListener('keydown', (e) =>{
 window.addEventListener('keyup', (e) =>{
     const key = e.code
 
-    if (key == 'ArrowUp'){
+    //--PLAYER 1
+    if (key == allKeys.jump){
         keysBoard.up=false
     }
-    if (key == 'ArrowRight'){
+    if (key == allKeys.right){
         keysBoard.right=false
     }
-    if (key == 'ArrowLeft'){
+    if (key == allKeys.left){
         keysBoard.left=false
     }
-    if (key == 'KeyO'){
+    if (key == allKeys.att1){
         keysBoard.o=false
     }
-    if (key == 'KeyP'){
+    if (key == allKeys.att2){
         keysBoard.p=false
     }
 
-    if (key == 'KeyW'){
+    //--PLAYER 2
+    if (key == allKeys.jump1){
         keysBoard.w=false
     }
-    if (key == 'KeyA'){
+    if (key == allKeys.left1){
         keysBoard.a=false
     }
-    if (key == 'KeyD'){
+    if (key == allKeys.right1){
         keysBoard.d=false
     }
-    if (key == 'KeyR'){
+    if (key == allKeys.att11){
         keysBoard.r=false
     }
-    if (key == 'KeyT'){
+    if (key == allKeys.att12){
         keysBoard.t=false
     }
 })

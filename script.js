@@ -113,15 +113,6 @@ function settings(){
     dialog.style.visibility = 'visible'
 }
 
-let = keyHolder
-function handleKey(e) {
-    e.preventDefault()
-    keyHolder = e.code
-
-    window.removeEventListener("keydown", handleKey)
-}
-
-
 let allKeys = {
     left:'ArrowLeft',
     right:'ArrowRight',
@@ -129,16 +120,58 @@ let allKeys = {
     att1:'KeyO',
     att2:'KeyP',
 
-    left1:'Key',
-    right1:'',
-    jump1:'',
-    att11:'',
-    att12:'',
+    left1:'KeyA',
+    right1:'KeyD',
+    jump1:'KeyW',
+    att11:'KeyR',
+    att12:'KeyT',
 }
 
-if(localStorage.getItem('keysMap')){allKeys = localStorage.getItem('keysMap')}
+function recalibrateKeys(){
+    //--PLAYER1
+    document.getElementById('btSetleft').textContent = allKeys.left
+    document.getElementById('btSetright').textContent = allKeys.right
+    document.getElementById('btSetjump').textContent = allKeys.jump
+    document.getElementById('btSetatt1').textContent = allKeys.att1
+    document.getElementById('btSetatt2').textContent = allKeys.att2
+    //--PLAYER2
+    document.getElementById('btSetBleft').textContent = allKeys.left1
+    document.getElementById('btSetBright').textContent = allKeys.right1
+    document.getElementById('btSetBjump').textContent = allKeys.jump1
+    document.getElementById('btSetBatt1').textContent = allKeys.att11
+    document.getElementById('btSetBatt2').textContent = allKeys.att12
+
+}
+
+if(localStorage.getItem('keysMap')){
+    allKeys = JSON.parse(localStorage.getItem('keysMap'))
+    recalibrateKeys()
+}
+
+
+let editBtn = ''
+let keyToEdit=''
+
+function handleKey(e) {
+    e.preventDefault()
+    allKeys[keyToEdit] = e.code
+    document.getElementById(editBtn).textContent = e.code
+    localStorage.setItem("keysMap", JSON.stringify(allKeys));
+
+    window.removeEventListener("keydown", handleKey)
+}
+
 
 function setKey(key){
+    keyToEdit = key
+    editBtn = 'btSet'+key
+    document.getElementById(editBtn).textContent = 'waiting...'
     window.addEventListener("keydown", handleKey)
 }
 
+function setKey1(key){
+    keyToEdit = key+'1'
+    editBtn = 'btSetB'+key
+    document.getElementById(editBtn).textContent = 'waiting...'
+    window.addEventListener("keydown", handleKey)
+}
