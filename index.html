@@ -20,6 +20,7 @@
             height: 100vh;
             display:flex;
             flex-direction: column;
+            color: white;
         }
         button{
             font-family: pixel;
@@ -65,7 +66,7 @@
             align-items: center;
             flex: 1;
         }
-        canvas{
+        #lookhole{
             background-color: grey;
             width: 200px;
             height: 200px;
@@ -94,14 +95,77 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            visibility: hidden;
+            /* visibility: hidden; */
         }
         #dialog-box{
             background-color: grey;
             padding:10px;
             border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
+        #dia-area{
+            display: flex;
+            flex-direction: row;
+            gap:4px;
+            align-items: center;
+        }
+
+        .charList{
+            display:block;
+            flex-direction:columns;
+        }
+
+        .charList a{
+            background-color: rgb(181, 181, 181);
+            padding: 3px;
+            border-radius: 8px;
+        }
+
+        .playerBlocks{
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap:10px;
+        }
+
+        .playerBlocks button{
+            background-color: none;
+            border: solid 2px rgb(46, 46, 46);
+            border-radius: 4px;
+            width: 100px;
+            height: 100px;
+            padding: 0;
+            padding-bottom: 2px;
+        }
+
+        .onChar{
+            background-color:rgb(207, 207, 207);
+        }
+
+        .playerBlocks img{
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+        }
+
+        .breakline{
+            height: 100px;
+            width: 8px;
+            border-radius: 30px;
+            background-color: rgb(43, 43, 43);
+        }
+
+        option, select{
+            font-family: pixel;
+            font-weight: 500;
+            background-color: rgb(72, 72, 72);
+            border-radius: 100px;
+            padding: 10px;
+            color: white;
+        }
         footer{padding: 2px; font-size: small;}
     </style>
 
@@ -116,9 +180,7 @@
             <a>Pick your Game Mode</a>
             <button onclick="playGame(0)">1 Player VS 1 Computer</button>
             <button onclick="playGame(1)">1 Player VS 1 Player</button>
-            <button onclick="playGame(2)">1 Player Squad VS 1Computer Squad</button>
-            <button onclick="playGame(3)">1 Player Squad VS 1 Computer Squad</button>
-            <button onclick="settings(4)">Settings</button>
+            <button onclick="settings(2)">Settings</button>
         </div>
 
         <div class="deco">
@@ -130,8 +192,71 @@
 
 
     <div id="dialog">
-        <div id="dialog-box"></div>
+        <div id="dialog-box">
+            <div><button onclick="cancelDia()">Cancel</button></div>
+            <div id="dia-area">
+                <div class = 'charList'>
+                    <a id="player1Desc" style="color: blue;">Player1</a>
+                    <div class="playerBlocks">
+                        <button id="Axelch1" onclick="player1Char('Axel')">
+                            <img draggable="false" src="assets/prev/axel.png">
+                        </button>
+
+                        <button id="Kiarach1" onclick="player1Char('Kiara')">
+                            <img draggable="false" src="assets/prev/kiara.png">
+                        </button>
+
+                        <button id="Kimalch1" onclick="player1Char('Kimal')">
+                            <img draggable="false" src="assets/prev/kimal.png">
+                        </button>
+
+                        <button id="Lizench1" onclick="player1Char('Lizen')">
+                            <img draggable="false" src="assets/prev/lizen.png">
+                        </button>
+
+                        <button id="Zarutoch1" onclick="player1Char('Zaruto')">
+                            <img draggable="false" src="assets/prev/zaruto.png">
+                        </button>
+                    </div>
+                    <br><br>
+                </div>
+
+                <div class="breakline"></div>
+                <div class = 'charList' style="text-align: right;">
+                    <a id="player2Desc" style="color: green;">Player2</a>
+                    <div class="playerBlocks">
+                        <button id="Axelch2" onclick="player2Char('Axel')">
+                            <img draggable="false" src="assets/prev/axel.png">
+                        </button>
+
+                        <button id="Kiarach2" onclick="player2Char('Kiara')">
+                            <img draggable="false" src="assets/prev/kiara.png">
+                        </button>
+
+                        <button id="Kimalch2" onclick="player2Char('Kimal')">
+                            <img draggable="false" draggable="false" src="assets/prev/kimal.png">
+                        </button>
+
+                        <button id="Lizench2" onclick="player2Char('Lizen')">
+                            <img draggable="false" src="assets/prev/lizen.png">
+                        </button>
+
+                        <button id="Zarutoch2" onclick="player2Char('Zaruto')">
+                            <img draggable="false" src="assets/prev/zaruto.png">
+                        </button></div>
+
+                        <label for="aimode">Computer Level</label>
+                        <select id="aimode">
+                            <option value="1">Easy</option>
+                            <option value="2">Normal</option>
+                            <option value="3">Medium</option>
+                            <option value="4">Hard</option>
+                        </select>
+                </div>
+            </div>
+                <div><button onclick="enterGame()">ENTER THE GAME</button></div>
+        </div>
     </div>
-    <footer><a>Special thanks to </a> <a href="https://itch.io/profile/luizmelo">luizmelo</a> <a> for the free characters</a></footer>
+    <footer><a>Special thanks to </a> <a href="https://itch.io/profile/luizmelo">luizmelo</a> <a> for the free characters. And <a href="https://edermunizz.itch.io/">edermunizz</a> for the background</a></footer>
 </body>
 </html>

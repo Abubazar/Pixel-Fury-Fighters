@@ -15,6 +15,9 @@ const FPS=60
 const gravity = 100
 const animSpeed=5
 const ground = 650
+let plr1Score = 0
+let plr2Score = 0
+let gameRound = 1
 
 function UpDrawImage(img, x, y, flipX, width, height, fsW,fsH, frame) {
     if (!img.complete) return
@@ -132,7 +135,7 @@ class Sprite{
     hurt(){
         console.log('hurt')
         this.hp-=5
-        if(this.hp<=0){this.alive=false; this.frame=0}
+        if(this.hp<=0 && this.alive){this.alive=false; this.frame=0; roundEnd(this.id)}
     }
 
     update(delta){
@@ -198,15 +201,15 @@ class Sprite{
 
         UpDrawImage(image,this.x-500,this.y-620,this.flipX,1000,1000,width,image.height,this.frame)
         
-        ctx.fillStyle='rgba(255, 0, 0, 0.5)'
-        ctx.fillRect(this.x-50,this.y-this.height,100,this.height)
+        // ctx.fillStyle='rgba(255, 0, 0, 0.5)'
+        // ctx.fillRect(this.x-50,this.y-this.height,100,this.height)
         if(this.attacking){
             let side
             if(this.frame>=this.atp && this.frame<=this.atp+2){
                 if(!this.flipX){side=140}
                 else{side=-200}
-                ctx.fillStyle='rgba(0, 255, 0, 0.5)'
-                ctx.fillRect((this.x-60)+side,this.y-this.height-40,180,160)
+                // ctx.fillStyle='rgba(0, 255, 0, 0.5)'
+                // ctx.fillRect((this.x-60)+side,this.y-this.height-40,180,160)
             }
         }
         
@@ -230,10 +233,45 @@ class Sprite{
 }
 
 const entities = []
+let player1, player2
+switch(localStorage.getItem('player1')){
+    case 'Axel':
+        player1=Axel;
+        break;
+    case 'Kiara':
+        player1=Kiara;
+        break;
+    case 'Kimal':
+        player1=Kimal;
+        break;
+    case 'Lizen':
+        player1=Lizen;
+        break;
+    case 'Zaruto':
+        player1=Zaruto;
+        break;
+}
 
+switch(localStorage.getItem('player2')){
+    case 'Axel':
+        player2=Axel;
+        break;
+    case 'Kiara':
+        player2=Kiara;
+        break;
+    case 'Kimal':
+        player2=Kimal;
+        break;
+    case 'Lizen':
+        player2=Lizen;
+        break;
+    case 'Zaruto':
+        player2=Zaruto;
+        break;
+}
 
-entities.push(new Sprite(100,20,entities.length,Lizen))
-entities.push(new Sprite(1230,30,entities.length,Kiara))
+entities.push(new Sprite(100,20,entities.length,player1))
+entities.push(new Sprite(1230,30,entities.length,player2))
 entities[0].opponent = entities[1]
 entities[1].opponent = entities[0]
 
@@ -287,6 +325,51 @@ function displayUI(){
 
     ctx.fillStyle = "rgb(210, 210, 210)"
     ctx.fillRect(580,40,120,80)
+
+    const gameMode = localStorage.getItem("mode")
+    ctx.font = "50px pixel";
+
+    ctx.fillStyle = "rgb(210, 210, 210)"
+    ctx.fillRect(50,5,180,55)
+
+    ctx.fillStyle = "blue"
+    ctx.fillText('Human',65,50)
+
+    if(gameMode=='0' || gameMode=='2'){
+        ctx.fillStyle = "rgb(210, 210, 210)"
+        ctx.fillRect(1050,5,180,55)
+
+        ctx.fillStyle = "green"
+        ctx.fillText('Cmptr',1070,50)
+
+    }
+    else if(gameMode=='1' || gameMode=='3'){
+        ctx.fillStyle = "rgb(210, 210, 210)"
+        ctx.fillRect(1050,5,180,55)
+
+        ctx.fillStyle = "green"
+        ctx.fillText('Human',1070,50)
+
+    }
+
+    ctx.fillStyle = "rgb(73, 73, 73)"
+    ctx.fillText(plr1Score,590,100)
+    ctx.fillText(plr2Score,665,100)
+
+    ctx.fillStyle = "rgba(205, 205, 205, 0.68)"
+    ctx.font='70px pixel'
+    const txtpos = (canvas.width/2)-(ctx.measureText('Round '+gameRound).width/2)
+    ctx.fillText('Round '+gameRound,txtpos,180)
+}
+
+function roundEnd(loser){
+    if(loser==0){
+        plr2Score+=1
+    }
+    else if(loser==1){
+        plr1Score+=1
+    }
+    gameRound+=1
 }
 
 
@@ -316,6 +399,7 @@ function update(delta){
 
 
 
+//-=GAME LOOP=-
 let lastTime = 0
 const timestep = 1000/FPS
 
