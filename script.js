@@ -42,6 +42,7 @@ const dialog = document.getElementById("dialog")
 const dialogBox = document.getElementById("dia-area")
 const settingBox = document.getElementById("set-dia")
 const enterBtn = document.getElementById('enterBtn')
+const squadMode = document.getElementById('squadMode')
 
 currentgamemode=0
 function playGame(mode){
@@ -49,6 +50,7 @@ function playGame(mode){
     settingBox.style.display='none'
     dialogBox.style.display = 'flex'
     enterBtn.style.display = 'block'
+    squadMode.style.display='none'
 
     currentgamemode=mode
     if(mode==0){
@@ -59,8 +61,9 @@ function playGame(mode){
         document.getElementById('player1Desc').textContent = "Player1 (Human)"
         document.getElementById('player2Desc').textContent = "Player2 (Human)"
     }
-    if(mode==2){
-        dialogBox.style.visibility='hidden'
+    if(mode>=2){
+        dialogBox.style.display='none'
+        squadMode.style.display='block'
     }
 }
 
@@ -105,11 +108,16 @@ function player2Char(character){
 
 
 function enterGame(){
-    if(player1=='none' || player2=='none')return
+    if(player1=='none' || player2=='none'){}
     else{
         localStorage.setItem('player1', player1)
         localStorage.setItem('player2', player2)
         localStorage.setItem('aimode', document.getElementById('aimode').value)
+        localStorage.setItem('gameMode', currentgamemode)
+        window.location.href = "game.html"
+    }
+    if(currentgamemode >=2){
+        localStorage.setItem('aimode', '3')
         localStorage.setItem('gameMode', currentgamemode)
         window.location.href = "game.html"
     }
@@ -120,6 +128,7 @@ function settings(){
     settingBox.style.display='flex'
     dialogBox.style.display = 'none'
     enterBtn.style.display = 'none'
+    squadMode.style.display='none'
 }
 
 let allKeys = {

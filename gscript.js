@@ -19,6 +19,7 @@ let plr1Score = 0
 let plr2Score = 0
 let gameRound = 1
 let gamePause = false
+let totaGameRounds = 3
 
 
 const gameMode = localStorage.getItem("gameMode")
@@ -91,7 +92,7 @@ const Zaruto = {};
 })
 
 const allCharacters = [Axel,Kiara,Kimal,Lizen,Zaruto]
-const allCharacters2 = [Zaruto,Lizen,Kimal,Kiara,Axel]
+const allCharacters1 = [Zaruto,Lizen,Kimal,Kiara,Axel]
 
 const bg = new Image(); bg.src = "assets/Background.png"
 allImages.push(bg)
@@ -294,6 +295,15 @@ entities[0].opponent = entities[1]
 entities[1].opponent = entities[0]
 entities[1].flipX=true
 
+
+let ctPlr1=0
+let ctPlr2=0
+if(gameMode==2 || gameMode==3){
+    totaGameRounds=5
+    entities[0].character=allCharacters[0]
+    entities[1].character=allCharacters1[0]
+}
+
 player = 0
 if(gameMode==0 || gameMode==2){aiEnemy = new EnemyController(1,localStorage.getItem('aimode'))}
 else{playerB2=1}
@@ -407,16 +417,27 @@ function roundEnd(loser){
         let topPlr
         if(plr1Score>plr2Score){topPlr="Player1"}
         else{topPlr="Player2"}
-        if(gameRound==3){text=topPlr+' is the Winner!'}
+        if(gameRound==totaGameRounds){text=topPlr+' is the Winner!'}
         ctx.font='110px pixel'
         const txtpos = (canvas.width/2)-(ctx.measureText(text).width/2)
         
         ctx.fillStyle = "rgba(233, 233, 233, 0.85)"
         ctx.fillText(text,txtpos,400)
-        if(gameRound<3){
+        if(gameRound<totaGameRounds){
             setTimeout(() => {
                 gamePause=false
                 gameRound+=1
+
+                
+                if(loser==0 && totaGameRounds==5){
+                    ctPlr1+=1
+                    entities[0].character = allCharacters[ctPlr1]
+                }
+                if(loser==1 && totaGameRounds==5){
+                    ctPlr2+=1
+                    entities[1].character = allCharacters[ctPlr2]
+                }
+
                 entities[0].x = 100
                 entities[0].y = 20
 
