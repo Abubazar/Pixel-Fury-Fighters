@@ -43,6 +43,7 @@ const dialogBox = document.getElementById("dia-area")
 const settingBox = document.getElementById("set-dia")
 const enterBtn = document.getElementById('enterBtn')
 const squadMode = document.getElementById('squadMode')
+console.log("this was kinda hard :)")
 
 currentgamemode=0
 function playGame(mode){

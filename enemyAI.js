@@ -105,7 +105,7 @@ class EnemyController{
                 else {
 
                     const lowHealth = this.hp < 30
-                    const playerAttacking = player.isAttacking
+                    const playerAttacking = player.attacking
 
                     // Strong bias toward fighting
                     let fightChance = 0.6 + this.difficulty * 0.25

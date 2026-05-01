@@ -106,6 +106,8 @@ for(let i=0; i<allImages.length; i++){
     
 }
 
+
+//--PLAYER SPRITE
 class Sprite{
     constructor(x, y, id, character){
         this.x = x
@@ -155,7 +157,7 @@ class Sprite{
     }
 
     update(delta){
-        this.x += this.velocityX*delta
+        if(this.alive){this.x += this.velocityX*delta}
         this.x = Math.max(50, Math.min(1230, this.x))
         
         this.velocityY+=gravity
@@ -251,6 +253,7 @@ class Sprite{
     }
 }
 
+//--GETTING ALL CHARACTERS FROM LOCALSTORAGE
 const entities = []
 let player1, player2
 switch(localStorage.getItem('player1')){
@@ -305,11 +308,11 @@ if(gameMode==2 || gameMode==3){
 }
 
 player = 0
-if(gameMode==0 || gameMode==2){aiEnemy = new EnemyController(1,localStorage.getItem('aimode'))}
+if(gameMode==0 || gameMode==2){aiEnemy = new EnemyController(1,localStorage.getItem('aimode')*2+2)}
 else{playerB2=1}
 
 
-
+//KEYBOARD SETUP
 const keysBoard = {
     up:false,
     left:false,
@@ -345,7 +348,7 @@ function KeyboardUpdate(){
     }
 }
 
-
+//UI ELEMENTS
 function displayUI(){
     //520
     let hb1 = 60
@@ -404,6 +407,7 @@ function displayUI(){
     ctx.fillText('Round '+gameRound,txtpos,180)
 }
 
+//WHEN A PLAYER LOOSES
 function roundEnd(loser){
     if(loser==0){
         plr2Score+=1
@@ -501,6 +505,7 @@ function gameLoop(ctime){
 }
 
 
+//PAUSE GAME
 function togglePause(){
     gamePause = !gamePause
     if(gamePause){
