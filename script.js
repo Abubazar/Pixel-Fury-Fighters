@@ -113,12 +113,30 @@ function settings(){
     dialog.style.visibility = 'visible'
 }
 
+let = keyHolder
 function handleKey(e) {
     e.preventDefault()
-    console.log(e.code)
+    keyHolder = e.code
 
     window.removeEventListener("keydown", handleKey)
 }
+
+
+let allKeys = {
+    left:'ArrowLeft',
+    right:'ArrowRight',
+    jump:'ArrowUp',
+    att1:'KeyO',
+    att2:'KeyP',
+
+    left1:'Key',
+    right1:'',
+    jump1:'',
+    att11:'',
+    att12:'',
+}
+
+if(localStorage.getItem('keysMap')){allKeys = localStorage.getItem('keysMap')}
 
 function setKey(key){
     window.addEventListener("keydown", handleKey)
