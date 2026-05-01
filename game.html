@@ -57,6 +57,17 @@
             background-image: url('assets/sleek.png');
             background-repeat: repeat;
             background-size: 80px 80px;
+
+            animation: scrollBg 5s linear infinite;
+        }
+
+        @keyframes scrollBg {
+            from {
+            background-position: 0 0;
+            }
+            to {
+            background-position: 80px 80px; /* adjust based on image size */
+            }
         }
 
         canvas{

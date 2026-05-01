@@ -20,8 +20,25 @@
             height: 100vh;
             display:flex;
             flex-direction: column;
+            align-items: center;
             color: white;
+
+            background-image: url('assets/sleek.png');
+            background-repeat: repeat;
+            background-size: 80px 80px;
+
+            animation: scrollBg 5s linear infinite;
         }
+
+        @keyframes scrollBg {
+            from {
+            background-position: 0 0;
+            }
+            to {
+            background-position: 80px 80px; /* adjust based on image size */
+            }
+        }
+
         button{
             font-family: pixel;
             padding: 10px;
@@ -41,14 +58,18 @@
             font-weight: 800;
             font-size: large;
             color: white;
-            background-color: rgb(255, 94, 0);
+            background-color: rgb(251, 116, 38);
             padding: 10px; margin: 0;
+            margin: 15px;
+            border-radius: 10px;
         }
         .sectionB{
             display:flex;
-            justify-content: left;
+            justify-content: center;
             gap: 5px;
             flex: 1;
+            align-items: center;
+            width: max-content;
         }
         #menu{
             display:flex;
@@ -57,9 +78,12 @@
             justify-content:center;
             background-color: grey;
             width: max-content;
+            height: max-content;
             flex: 1;
             gap: 10px;
-            padding: 5px;
+            padding: 15px;
+            border-radius: 10px;
+            border: solid 3px white;
         }
         .deco{
             display: flex;
@@ -72,6 +96,7 @@
             height: 200px;
             margin: 50px;
             border-radius: 10px;
+            border: 3px solid white;
         }
 
         @keyframes bounce {
@@ -187,7 +212,7 @@
             border-radius: 6px;
             border: 3px solid rgb(98, 98, 98);
         }
-        footer{padding: 2px; font-size: small; background-color: grey;}
+        footer{padding: 2px; font-size: small; background-color: rgb(146, 145, 145); padding: 6px; border-radius: 6px;}
     </style>
 
 <body>
