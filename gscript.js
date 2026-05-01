@@ -18,6 +18,10 @@ const ground = 650
 let plr1Score = 0
 let plr2Score = 0
 let gameRound = 1
+let gamePause = false
+
+
+const gameMode = localStorage.getItem("gameMode")
 
 function UpDrawImage(img, x, y, flipX, width, height, fsW,fsH, frame) {
     if (!img.complete) return
@@ -135,9 +139,11 @@ class Sprite{
 
     hurt(){
         console.log('hurt')
-        this.hp-=5
-        this.frame=0
-        this.pain=1
+        if(this.alive){
+            this.hp-=5
+            this.frame=0
+            this.pain=1
+        }
         if(this.hp<=0 && this.alive){
             this.alive=false
             roundEnd(this.id)
@@ -283,13 +289,14 @@ switch(localStorage.getItem('player2')){
 }
 
 entities.push(new Sprite(100,20,entities.length,player1))
-entities.push(new Sprite(1230,30,entities.length,player2))
+entities.push(new Sprite(1230,20,entities.length,player2))
 entities[0].opponent = entities[1]
 entities[1].opponent = entities[0]
+entities[1].flipX=true
 
 player = 0
-if(localStorage.getItem('gameMode')==0 || localStorage.getItem('gameMode')==2){player2 = new EnemyController(1,localStorage.getItem('aimode'))}
-else{}
+if(gameMode==0 || gameMode==2){playerB = new EnemyController(1,localStorage.getItem('aimode'))}
+else{playerB2=1}
 
 
 
@@ -307,6 +314,7 @@ const keysBoard = {
     t:false,
 }
 function KeyboardUpdate(){
+    //--PLAYER 1 CONTROLS
     if(keysBoard.up){entities[player].jump()}
     
     if(keysBoard.left){entities[player].move('left')}
@@ -314,6 +322,17 @@ function KeyboardUpdate(){
     else if(keysBoard.o){entities[player].attack(1)}
     else if(keysBoard.p){entities[player].attack(2)}
     else{entities[player].move('none')}
+
+    //--PLAYER 2 CONTROLS
+    if(gameMode==1 || gameMode==3){
+        if(keysBoard.w){entities[playerB2].jump()}
+    
+        if(keysBoard.a){entities[playerB2].move('left')}
+        else if(keysBoard.d){entities[playerB2].move('right')}
+        else if(keysBoard.r){entities[playerB2].attack(1)}
+        else if(keysBoard.t){entities[playerB2].attack(2)}
+        else{entities[playerB2].move('none')}
+    }
 }
 
 
@@ -339,7 +358,7 @@ function displayUI(){
     ctx.fillStyle = "rgb(210, 210, 210)"
     ctx.fillRect(580,40,120,80)
 
-    const gameMode = localStorage.getItem("mode")
+    
     ctx.font = "50px pixel";
 
     ctx.fillStyle = "rgb(210, 210, 210)"
@@ -382,7 +401,39 @@ function roundEnd(loser){
     else if(loser==1){
         plr1Score+=1
     }
-    gameRound+=1
+    setTimeout(() => {
+        gamePause=true
+        let text='Round Ended!'
+        let topPlr
+        if(plr1Score>plr2Score){topPlr="Player1"}
+        else{topPlr="Player2"}
+        if(gameRound==3){text=topPlr+' is the Winner!'}
+        ctx.font='110px pixel'
+        const txtpos = (canvas.width/2)-(ctx.measureText(text).width/2)
+        
+        ctx.fillStyle = "rgba(233, 233, 233, 0.85)"
+        ctx.fillText(text,txtpos,400)
+        if(gameRound<3){
+            setTimeout(() => {
+                gamePause=false
+                gameRound+=1
+                entities[0].x = 100
+                entities[0].y = 20
+
+                entities[1].x = 1230
+                entities[1].y = 20
+
+                entities[0].alive=true
+                entities[1].alive=true
+
+                entities[0].hp=100
+                entities[1].hp=100
+
+                entities[0].flipX=false
+                entities[1].flipX=true
+            }, 2000);
+        }
+    }, 2000);
 }
 
 
@@ -404,7 +455,7 @@ function render(){
 
 function update(delta){
     KeyboardUpdate()
-    player2.update(delta)
+    if(gameMode==0 || gameMode==2){player2.update(delta)}
     for(let i=0; i<entities.length; i++){
         entities[i].update(delta)
     }
@@ -419,7 +470,7 @@ const timestep = 1000/FPS
 function gameLoop(ctime){
     const deltaTime = (ctime - lastTime)/1000
 
-    if (ctime - lastTime >= timestep){
+    if (ctime - lastTime >= timestep && !gamePause){
         update(deltaTime)
         render()
         lastTime = ctime
