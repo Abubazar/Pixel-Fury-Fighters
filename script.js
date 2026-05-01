@@ -40,10 +40,16 @@ const deltaTime = (ctime - lastTime)/1000
 
 const dialog = document.getElementById("dialog")
 const dialogBox = document.getElementById("dia-area")
+const settingBox = document.getElementById("set-dia")
+const enterBtn = document.getElementById('enterBtn')
 
 currentgamemode=0
 function playGame(mode){
     dialog.style.visibility = 'visible'
+    settingBox.style.display='none'
+    dialogBox.style.display = 'flex'
+    enterBtn.style.display = 'block'
+
     currentgamemode=mode
     if(mode==0){
         document.getElementById('player1Desc').textContent = "Player1 (Human)"
@@ -111,6 +117,9 @@ function enterGame(){
 
 function settings(){
     dialog.style.visibility = 'visible'
+    settingBox.style.display='flex'
+    dialogBox.style.display = 'none'
+    enterBtn.style.display = 'none'
 }
 
 let allKeys = {
