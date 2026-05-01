@@ -16,6 +16,8 @@
         .toolbar{
             background-color: rgb(217, 69, 0);
             padding: 10px;
+            display: flex;
+            justify-content: center;
         }
         
         body{
@@ -23,6 +25,27 @@
             display: flex;
             flex-direction:column;
             height:100vh;
+        }
+
+        button{
+            font-family: pixel;
+            padding: 10px;
+            background-color: rgb(72, 72, 72);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            letter-spacing: 1px;
+            transition: all 0.3 ease;
+        }
+        @keyframes bounce {
+            0% {transform:rotate(10deg);}
+            30% {transform:rotate(-5deg);}
+            60% {transform:rotate(5deg);}
+            90% {transform:rotate(0deg);}
+        }
+
+        button:hover{
+            animation: bounce 0.5s;
         }
         
         .playArea{
@@ -49,7 +72,7 @@
 </head>
 <body>
     <div class="toolbar">
-        <button onclick="sal()">Hello</button>
+        <button onclick="togglePause()">Pause/Play</button>
     </div>
 
     <div class="playArea">

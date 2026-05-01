@@ -230,9 +230,6 @@ class Sprite{
                 // ctx.fillRect((this.x-60)+side,this.y-this.height-40,180,160)
             }
         }
-        
-        ctx.fillStyle='rgb(255, 255, 255)'
-        ctx.fillRect(this.x-2,this.y-2,4,4)
     }
 
     jump(){
@@ -295,7 +292,7 @@ entities[1].opponent = entities[0]
 entities[1].flipX=true
 
 player = 0
-if(gameMode==0 || gameMode==2){playerB = new EnemyController(1,localStorage.getItem('aimode'))}
+if(gameMode==0 || gameMode==2){aiEnemy = new EnemyController(1,localStorage.getItem('aimode'))}
 else{playerB2=1}
 
 
@@ -455,7 +452,7 @@ function render(){
 
 function update(delta){
     KeyboardUpdate()
-    if(gameMode==0 || gameMode==2){player2.update(delta)}
+    if(gameMode==0 || gameMode==2){aiEnemy.update(delta)}
     for(let i=0; i<entities.length; i++){
         entities[i].update(delta)
     }
@@ -477,4 +474,9 @@ function gameLoop(ctime){
     }
 
     requestAnimationFrame(gameLoop)
+}
+
+
+function togglePause(){
+    gamePause = !gamePause
 }

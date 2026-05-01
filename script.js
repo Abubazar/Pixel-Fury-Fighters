@@ -44,7 +44,6 @@ const dialogBox = document.getElementById("dia-area")
 currentgamemode=0
 function playGame(mode){
     dialog.style.visibility = 'visible'
-    dialogBox.style.visibility='visible'
     currentgamemode=mode
     if(mode==0){
         document.getElementById('player1Desc').textContent = "Player1 (Human)"
@@ -100,9 +99,28 @@ function player2Char(character){
 
 
 function enterGame(){
-    localStorage.setItem('player1', player1)
-    localStorage.setItem('player2', player2)
-    localStorage.setItem('aimode', document.getElementById('aimode').value)
-    localStorage.setItem('gameMode', currentgamemode)
-    window.location.href = "game.html"
+    if(player1=='none' || player2=='none')return
+    else{
+        localStorage.setItem('player1', player1)
+        localStorage.setItem('player2', player2)
+        localStorage.setItem('aimode', document.getElementById('aimode').value)
+        localStorage.setItem('gameMode', currentgamemode)
+        window.location.href = "game.html"
+    }
 }
+
+function settings(){
+    dialog.style.visibility = 'visible'
+}
+
+function handleKey(e) {
+    e.preventDefault()
+    console.log(e.code)
+
+    window.removeEventListener("keydown", handleKey)
+}
+
+function setKey(key){
+    window.addEventListener("keydown", handleKey)
+}
+
