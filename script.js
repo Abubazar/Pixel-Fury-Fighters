@@ -103,6 +103,6 @@ function enterGame(){
     localStorage.setItem('player1', player1)
     localStorage.setItem('player2', player2)
     localStorage.setItem('aimode', document.getElementById('aimode').value)
-    localStorage.setItem('mode', currentgamemode)
+    localStorage.setItem('gameMode', currentgamemode)
     window.location.href = "game.html"
 }

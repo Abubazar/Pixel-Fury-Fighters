@@ -52,35 +52,35 @@ const allImages = []
 
 
 const Axel = {};
-["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
+["Attack1", "Attack2", "Death", "Idle", "Jump", "Run", "hurt"].forEach(name => {
   Axel[name] = [new Image(),135]
   Axel[name][0].src = `assets/Axel/${name}.png`
   allImages.push(Axel[name][0])
 })
 
 const Kiara = {};
-["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
+["Attack1", "Attack2", "Death", "Idle", "Jump", "Run", "hurt"].forEach(name => {
   Kiara[name] = [new Image(),150]
   Kiara[name][0].src = `assets/Kiara/${name}.png`
   allImages.push(Kiara[name][0])
 })
 
 const Kimal = {};
-["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
+["Attack1", "Attack2", "Death", "Idle", "Jump", "Run", "hurt"].forEach(name => {
   Kimal[name] = [new Image(),200]
   Kimal[name][0].src = `assets/Kimal/${name}.png`
   allImages.push(Kimal[name][0])
 })
 
 const Lizen = {};
-["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
+["Attack1", "Attack2", "Death", "Idle", "Jump", "Run", "hurt"].forEach(name => {
   Lizen[name] = [new Image(),162]
   Lizen[name][0].src = `assets/Lizen/${name}.png`
   allImages.push(Lizen[name][0])
 })
 
 const Zaruto = {};
-["Attack1", "Attack2", "Death", "Idle", "Jump", "Run"].forEach(name => {
+["Attack1", "Attack2", "Death", "Idle", "Jump", "Run", "hurt"].forEach(name => {
   Zaruto[name] = [new Image(),200]
   Zaruto[name][0].src = `assets/Zaruto/${name}.png`
   allImages.push(Zaruto[name][0])
@@ -120,6 +120,7 @@ class Sprite{
         this.attacked=false
         this.hp=100
         this.alive=true
+        this.pain=0
     }
 
     attack(type){
@@ -135,7 +136,12 @@ class Sprite{
     hurt(){
         console.log('hurt')
         this.hp-=5
-        if(this.hp<=0 && this.alive){this.alive=false; this.frame=0; roundEnd(this.id)}
+        this.frame=0
+        this.pain=1
+        if(this.hp<=0 && this.alive){
+            this.alive=false
+            roundEnd(this.id)
+        }
     }
 
     update(delta){
@@ -184,6 +190,12 @@ class Sprite{
 
         if(!this.alive){
             this.animation="Death"
+        }
+
+        if(this.pain>0){
+            this.animation="hurt"
+            this.pain+=1
+            if(this.pain>=10){this.pain=0}
         }
 
         const anim = this.animation
@@ -276,7 +288,8 @@ entities[0].opponent = entities[1]
 entities[1].opponent = entities[0]
 
 player = 0
-player2 = new EnemyController(1,4)
+if(localStorage.getItem('gameMode')==0 || localStorage.getItem('gameMode')==2){player2 = new EnemyController(1,localStorage.getItem('aimode'))}
+else{}
 
 
 
