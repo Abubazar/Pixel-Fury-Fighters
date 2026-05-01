@@ -90,6 +90,9 @@ const Zaruto = {};
   allImages.push(Zaruto[name][0])
 })
 
+const allCharacters = [Axel,Kiara,Kimal,Lizen,Zaruto]
+const allCharacters2 = [Zaruto,Lizen,Kimal,Kiara,Axel]
+
 const bg = new Image(); bg.src = "assets/Background.png"
 allImages.push(bg)
 
@@ -479,4 +482,10 @@ function gameLoop(ctime){
 
 function togglePause(){
     gamePause = !gamePause
+    if(gamePause){
+        canvas.style.filter = "blur(3px)";
+    }
+    else{
+        canvas.style.filter = "blur(0)";
+    }
 }
